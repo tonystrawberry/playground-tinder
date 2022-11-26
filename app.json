@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "playground.tinder",
-    "slug": "playground.tinder",
+    "name": "playground-tinder",
+    "slug": "playground-tinder",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,6 +28,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f93b604e-9996-4901-8099-39ceea0f2df9"
+      }
+    },
+    "owner": "tonystrawberry"
   }
 }

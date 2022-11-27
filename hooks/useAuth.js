@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import * as Google from 'expo-auth-session/providers/google'
 import * as WebBrowser from 'expo-web-browser'
 import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential, signOut } from '@firebase/auth'
@@ -19,6 +19,11 @@ export const AuthProvider = ({ children }) => {
       expoClientId: '787923097093-7jj643que85aidebqi89u1uek6mesm05.apps.googleusercontent.com',
     },
   )
+
+  async function login(){
+    setLoading(true)
+    await promptAsync()
+  }
 
   async function logout() {
     setLoading(true)
@@ -45,22 +50,20 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (response?.type === 'success') {
       const { authentication: { idToken, accessToken } } = response;
-      signIn(idToken, accessToken).catch((error) => setError(error)).finally(() => setLoading(false))
+      signInWithCredential(auth, GoogleAuthProvider.credential(idToken, accessToken)).catch((error) => setError(error)).finally(() => setLoading(false))
     }
   }, [response])
 
-  async function signIn(idToken, accessToken) {
-    await signInWithCredential(auth, GoogleAuthProvider.credential(idToken, accessToken))
-  }
+  const memoedValue = useMemo(() => ({
+    user,
+    loading,
+    error,
+    login,
+    logout
+  }), [user, loading, error])
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      loading,
-      error,
-      promptAsync,
-      logout
-    }}>
+    <AuthContext.Provider value={memoedValue}>
       {!loadingInitial && children}
     </AuthContext.Provider>
   )

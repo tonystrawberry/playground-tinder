@@ -1,4 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaView, Text, View } from "react-native"
 import { AuthProvider } from "./hooks/useAuth"
 import StackNavigator from "./StackNavigator"
 
